@@ -1,0 +1,166 @@
+package bq2;
+import java.util.ArrayList;
+import java.util.Iterator;
+
+public class HumanBeing {
+	public ArrayList<HumanGroup> Disciples;
+	public ArrayList<HumanGroup> Apprentices;
+	public ArrayList<HumanGroup> Nonbelievers;
+	public long TotalPopulation;
+	public long TotalDisciples;
+	public long TotalNonbelievers;
+	
+	public HumanBeing() {
+		this.Apprentices = new ArrayList<HumanGroup>();
+		this.Disciples = new ArrayList<HumanGroup>();
+		this.Nonbelievers = new ArrayList<HumanGroup>();
+		this.TotalDisciples = 0;
+		this.TotalPopulation = 0;
+		this.TotalNonbelievers = 0;
+	}
+	
+	public void Intitiate() {
+		this.TotalPopulation = 7700000000l;
+		this.TotalDisciples = 13l;
+		HumanGroup firstDisciples = new HumanGroup();
+		firstDisciples.Age = 30;
+		firstDisciples.Population = 13;
+		firstDisciples.IsDisciple = true;
+		this.Disciples.add(firstDisciples);
+		HumanGroup allPopulation = new HumanGroup();
+		allPopulation.Age = 18;
+		allPopulation.Population = 7700000000l - firstDisciples.Population;
+		//this.TotalNonbelievers
+		this.Nonbelievers.add(allPopulation);
+	}
+	
+	//what happens when the human beings live for 1 year
+	public void AgeUp() {
+		//events whould happen 
+		//all groups of human would have baby at the age of 30
+		long totalBabies = 0;
+		Iterator<HumanGroup> iDisciples = this.Disciples.iterator();
+		while(iDisciples.hasNext()) {
+			HumanGroup curDisciples = iDisciples.next();
+			curDisciples.Aging();
+			if (curDisciples.Age == 30) {
+				totalBabies = totalBabies + curDisciples.Population / 2 * 2;
+			}
+		}
+		Iterator<HumanGroup> iApprentices = this.Apprentices.iterator();
+		while(iApprentices.hasNext()) {
+			HumanGroup curApprentices = iApprentices.next();
+			curApprentices.Aging();
+			if (curApprentices.Age == 30) {
+				totalBabies = totalBabies + curApprentices.Population / 2 * 2;
+			}
+			
+			if(curApprentices.YearsBeingApprentice == 3) {
+				curApprentices.IsApprentice = false;
+				curApprentices.YearsBeingApprentice = 0;
+				curApprentices.IsDisciple = true;
+				iApprentices.remove();
+				this.Disciples.add(curApprentices);
+				totalDisciples = totalDisciples + curApprentices.Population;
+			}
+		}
+		
+		Iterator<HumanGroup> iNonbelievers = this.Nonbelievers.iterator();
+		while(iNonbelievers.hasNext()) {
+			HumanGroup curNonbelievers= iNonbelievers.next();
+			curNonbelievers.Aging();
+			if (curNonbelievers.Age == 30) {
+				totalBabies = totalBabies + curNonbelievers.Population / 2 * 2;
+			}
+		}
+		//the apprentice would become disciple when the training year is from 2 to 3
+		long totalDisciples = 0;
+		Iterator<HumanGroup> iDisciples = this.Disciples.iterator();
+		while(iDisciples.hasNext()) {
+			HumanGroup curDisciples = iDisciples.next();
+			if(curDisciples.YearsInTeaching == 3) {
+				curDisciples.YearsInTeaching = 0;
+				curDisciples.IsTeaching = false;
+			}
+			if(!curDisciples.IsTeaching) {
+				//disciples will go and find now non-believers to teach
+				totalDisciples = totalDisciples + curDisciples.Population;
+				curDisciples.IsTeaching = true;
+			}
+			
+		}
+		//the disciples would increase the teaching year by one
+		//the disciples whos teaching is three years will stop teaching and roll back to zero
+		//the disciples will find the qualified non-believers and teach them to be apprentice
+		long capOfNewApprentice = totalDisciples * 2;
+		iNonbelievers = this.Nonbelievers.iterator();
+		while(iNonbelievers.hasNext()) {
+			HumanGroup curNonbelievers = iNonbelievers.HumanGroup();
+			//if the nonbeliever group population
+			//is less that total disciples * 2, then they will become apprentices
+			//otherwise, a portion will become apprentices
+			//scanning each human group, and subtract from the cap of new apprentices until it reaches 0
+			HumanGroup curNon = iNonbelievers.next();
+			if (curNonbelievers.Population == capOfNewApprentice) {
+				curNonbelievers.ISApprentice = true;
+				iNonbelievers.remove();
+				this.Apprentices.add(curNonbelievers);
+				break;
+			}else if(curNonbelievers.Population < capOfNewApprentice) {
+				curNonbelievers.ISApprentice = true;
+				iNonbelievers.remove();
+				this.Apprentices.add(curNonbelievers);
+				capOfNewApprentice = capOfNewApprentice - curNonbelievers.Population;
+			}else if (capOfNewApprentice == 0){
+				break;
+			}else {
+				curNonbelievers.Population = curNonbelievers.Population - capOfNewApprentice;
+				HumanGroup newApprentices = new HumanGroup();
+				newApprentices.Population = capOfNewApprentice;
+				newApprentices.Age = curNonbelievers.Age;
+				newApprentices.IsApprentice = true;
+				this.Apprentices.add(newApprentices);
+			}
+		}
+		
+		//all human dies at the age of 72
+		//the total population and total disciples number will change each year
+		Iterator<HumanGroup> iNonbelievers = this.Nonbelievers.iterator();
+		while(iNonbelievers.hasNext()) {
+			//if nonbeliever group pop is less thatn total disciples * 2, then they will become apprectice
+			//otherwise, portion will become apprentice
+		}
+		//iterate all nonbeliever groups and find enough people to train
+		
+		if(totalBabies > 0) {
+			HumanGroup Baby = new HumanGroup();
+			Baby.Age = 1;
+			Baby.Population = totalBabies;
+			this.Nonbelievers.add(Baby);
+		}
+		//people die
+	}
+	
+	public void Report() {
+		//calculate how many disciples there are
+		//calculate how many populations
+		//print it out
+		//determine wether the game needs to continue
+		long totalDisciples = 0;
+		for(int i = 0; i < this.Disciples.size(); i++) {
+			totalDisciples = this,Disciples.get(i).Population;
+			//calculate how many populations
+			long totalPopulation = 0;
+			totalPopulation = totalPopulation + totalDisciples;
+			for(int i = 0; i < this.TotalDisciples.Nonbelievrs.size(); i++) {
+				totalPopulation = totalPopulation + this.Apprentices.get(i).Population;22
+			}
+			System.out.println("Total population is: " + this.TotalPopulation);
+			System.out.println("Total population of disciples is: " + this.TotalDisciples);
+			//determine whether the game needs to continue
+			//let's see when the total disciples are more than the nonbelievers
+			
+			
+		}
+	}
+}
