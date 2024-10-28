@@ -1,0 +1,50 @@
+package bq2;
+
+public class HumanGroup {
+	public long Population;
+	public int Age;
+	public int YearsBeingApprentice;
+	public int YearsInTeaching;
+	public boolean IsDisciple;
+	public boolean IsApprentice;
+	public boolean IsTeaching;
+	public Human HumanSettings;
+	
+	//create blank instance of HumanGroup
+	//still need to set properties later
+	public HumanGroup() {
+		this.Population = 0;
+		this.Age = 0;
+		this.YearsBeingApprentice = 0;
+		this.YearsInTeaching = 0;
+		this.IsApprentice = false;
+		this.IsDisciple = false;
+		
+	}
+	
+	public boolean CanBeApprentice() {
+		return this.Age >= this.HumanSettings.AgeAsApprentice && !this.IsApprentice && !this.IsDisciple;
+	}
+	
+	public boolean HasBecomeDiciple() {
+		return this.IsDisciple;
+	}
+	
+	public boolean IsGivingBirth() {
+		return this.Age == 30;
+	}
+	
+	public boolean CanTrainApprentice() {
+		return this.IsDiciple && this.YearsInTeaching == this.HumanSettigns.YearsOfApprentice;
+	}
+	
+	public void Aging() {
+		this.Age++;
+		if(this.IsApprentice) {
+			this.YearsBeingApprentice++;
+		}
+		if(this.IsTeaching && this.IsDiciple) {
+			this.YearsInTeaching++;
+		}
+	}
+}
